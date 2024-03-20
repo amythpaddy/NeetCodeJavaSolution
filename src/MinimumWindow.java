@@ -1,56 +1,42 @@
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class MinimumWindow {
     public static void main(String[] args) {
-        System.out.println(new Solution().minWindow("ADOBECODEBANC", "ABCX"));
+        System.out.println(new Solution().minWindow("cabwefgewcwaefgcf", "cae"));
     }
 
     static class Solution {
+        Map<Character, Integer> have = new HashMap<>();
+        Map<Character, Integer> want = new HashMap<>();
+        int haveCount = 0;
+        int wantCount = 0;
+        Set<Character> tSet = new HashSet<>();
+        int low = 0;
+        int high = 0;
+
         public String minWindow(String s, String t) {
-            int match = t.length();
-            Map<Character, Integer> tmap = new HashMap<>();
-            Map<Character, Integer> smap = new HashMap<>();
-            for (int i = 0; i < t.length(); i++) {
-                char temp = t.charAt(i);
-                tmap.put(temp, tmap.getOrDefault(temp, 0) + 1);
+            if (t.equalsIgnoreCase(""))
+                return "";
+            for (char tChar : t.toCharArray()) {
+                tSet.add(tChar);
+                want.put(tChar, want.getOrDefault(tChar, 0) + 1);
+                wantCount++;
             }
-            for (int i = 0; i < s.length(); i++) {
-                char temp = s.charAt(i);
-                smap.put(temp, smap.getOrDefault(temp, 0) + 1);
-            }
-            int low = 0;
-            int high = s.length() - 1;
             int i = 0;
-            while (low <= high) {
-                char currentChar = s.charAt(low);
-                int currCount = smap.get(currentChar);
-                if (tmap.containsKey(currentChar)) {
-                    if (currCount - 1 >= tmap.get(currentChar)) {
-                        smap.put(currentChar, currCount - 1);
-                        low++;
-                    } else {
-                        break;
-                    }
-                } else {
-                    low++;
+            while (i < s.length()) {
+                char temp = s.charAt(i);
+                have.put(temp, have.getOrDefault(temp, 0) + 1);
+                if (tSet.contains(temp) && have.get(t).equals(want.get(t))) {
+                    haveCount++;
                 }
+//                if(haveCount==needCount)
+
             }
-            while (low >= high) {
-                char currentChar = s.charAt(high);
-                int currCount = smap.get(currentChar);
-                if (tmap.containsKey(currentChar)) {
-                    if (currCount - 1 >= tmap.get(currentChar)) {
-                        smap.put(currentChar, currCount - 1);
-                        high--;
-                    } else {
-                        break;
-                    }
-                } else {
-                    high--;
-                }
-            }
-            return s.substring(low, high + 1);
+
+            return "";
         }
     }
 }
